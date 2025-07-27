@@ -10,7 +10,7 @@ import gradio as gr
 load_dotenv(override=True)
 
 def push(text):
-    requests.post(
+    response = requests.post(
         "https://api.pushover.net/1/messages.json",
         data={
             "token": os.getenv("PUSHOVER_TOKEN"),
@@ -18,6 +18,8 @@ def push(text):
             "message": text,
         }
     )
+    if response.status_code != 200:
+        print(f"Failed to send push notification: {response.status_code} - {response.text}")
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):
